@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "vuln-remediation": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["${workspaceFolder}/main.py"]
+    }
+  }
+}
