@@ -1,11 +1,21 @@
 """Remediation patterns for common vulnerability types."""
 
 from __future__ import annotations
+from dataclasses import dataclass
 
-REMEDIATION_PATTERNS: dict[str, dict[str, str]] = {
-    "hardcoded-credentials": {
-        "principle": "Never store secrets in source code. Use environment variables or a secrets manager.",
-        "fix_pattern": """
+
+@dataclass
+class RemediationPattern:
+    detection_regex: str
+    principle: str
+    fix_pattern: str
+
+
+REMEDIATION_PATTERNS: dict[str, RemediationPattern] = {
+    "hardcoded-credentials": RemediationPattern(
+        detection_regex=r'(?i)(password|pwd|passwd|secret|api_key|token)\s*=\s*["\'][^"\']+["\']',
+        principle="Never store secrets in source code. Use environment variables or a secrets manager.",
+        fix_pattern="""
 # BEFORE (vulnerable):
 DB_PASSWORD = "admin123"
 
@@ -19,5 +29,5 @@ if not DB_PASSWORD:
 # from azure.keyvault.secrets import SecretClient
 # secret = client.get_secret("db-password")
 """,
-    }
+    ),
 }

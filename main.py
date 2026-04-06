@@ -53,22 +53,19 @@ def detect_vulnerabilities(code: str) -> str:
     """
     findings = []
     for vuln_type, data in REMEDIATION_PATTERNS.items():
-        regex = data.get("detection_regex")
-        if not regex:
-            continue
-        pattern = re.compile(regex)
+        pattern = re.compile(data.detection_regex)
         for lineno, line in enumerate(code.splitlines(), 1):
             if pattern.search(line):
                 findings.append({
                     "type": vuln_type,
                     "lineno": lineno,
                     "code": line.strip(),
-                    "principle": data.get("principle", ""),
-                    "fix_pattern": data.get("fix_pattern", ""),
+                    "principle": data.principle,
+                    "fix_pattern": data.fix_pattern,
                 })
     if not findings:
-        return "No vulnerabilities detected."
-    report = [f"Detected {len(findings)} vulnerability finding(s):\n"]
+        return "[MCP SERVER] No vulnerabilities detected."
+    report = [f"[MCP SERVER] Detected {len(findings)} vulnerability finding(s):\n"]
     for f in findings:
         report.append(f"[{f['type']}] line {f['lineno']}: {f['code']}")
         report.append(f"Remediation: {f['principle']}")

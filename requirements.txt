@@ -1,3 +1,5 @@
 fastmcp
 starlette
 uvicorn
+pytest
+pytest-asyncio
